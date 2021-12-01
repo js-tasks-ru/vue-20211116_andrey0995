@@ -21,6 +21,6 @@ const app = createApp( RootComp );
 const Btn = app.mount( "#app" );
 
 // Добавляем vm в глобальные переменные для простой отладки в консоли браузера
-window.Btn = Btn;
+//window.Btn = Btn;
 
 
