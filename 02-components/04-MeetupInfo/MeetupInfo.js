@@ -5,15 +5,15 @@ export default defineComponent({
   props: {
     organizer: {
       type: String
-      ,default: ''
+      ,required: true
     },    
     place: {
       type: String
-      ,default: ''
+      ,required: true
     }, 
     date: {
       type: Number
-      ,default: 0
+      ,required: true
     }, 
   },
   methods: {
