@@ -25,11 +25,14 @@ export default defineComponent({
       });
     },
     formatAsLocalDateYYYYMMDD(timestamp) {
+      return new Date(timestamp).toISOString().split('T')[0];
+/*      
       var date = new Date(timestamp)
       var d = date.getDate();
       var m = date.getMonth() + 1; // Month from 0 to 11
       var y = date.getFullYear();
       return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+*/      
     },
   },
   template: `

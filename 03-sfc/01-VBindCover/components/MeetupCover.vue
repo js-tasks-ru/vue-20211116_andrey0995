@@ -19,7 +19,10 @@ export default {
   },
   computed: {
     image_url() {
-      return "url('" + this.image + "')";
+      if ( this.image )
+        return "url('" + this.image + "')";
+      else
+        return 'var(--default-cover)';
     },
   },
 };
