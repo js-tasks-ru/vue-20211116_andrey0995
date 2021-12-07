@@ -21,7 +21,7 @@ export default defineComponent({
 
   // Шаблон потребуется отредактировать
   template: 
-  `<button type="button" @click="this.$emit('update:count', this.count + 1);">
+  `<button type="button" @click="this.$emit('update:count', count + 1);">
      {{ this.count }}
   </button>`,
 
