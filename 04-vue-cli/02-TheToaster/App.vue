@@ -13,7 +13,6 @@ export default {
   name: 'App',
 
   components: { TheToaster },
-
   methods: {
     success() {
       this.$refs.toaster.success('Success ' + new Date().toLocaleTimeString());

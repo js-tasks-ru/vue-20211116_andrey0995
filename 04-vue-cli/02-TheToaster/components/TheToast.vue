@@ -1,40 +1,39 @@
 <template>
-  <div class="toasts">
-    <the-toast v-for="item in toasts" :toast="item" :toasts = "toasts" />  
-  </div>
+
+    <div v-if="toast.type === 'success'" @click="click" class="toast toast_success">
+      <ui-icon class="toast__icon" icon="check-circle" />
+      <span>{{ toast.message }}</span>
+    </div>
+
+    <div v-if="toast.type === 'error'" @click="click" class="toast toast_error">
+      <ui-icon class="toast__icon" icon="alert-circle" />
+      <span>{{ toast.message }}</span>
+    </div>
 </template>
 
 <script>
-import TheToast from './TheToast.vue';
+import UiIcon from './UiIcon';
 import { DelToast } from '../api/func.js';
 
 export default {
-  name: 'TheToaster',
-  
-  components: { TheToast },
+  name: 'TheToast',
+  components: { UiIcon },
 
-  data() {
-     return {
-       toasts : [],
-     }
+  props: {
+    toast: {
+      type: Object,
+      required: true,
+    },
+    toasts: {
+      type: Array,
+      required: true,
+    },
   },
   methods: {
-    AddToust( message, type ) {
-      var toast = {
-       message: message,
-       type: type,
-      }
-      this.toasts.push( toast );
-      setTimeout( DelToast, 5000, this.toasts, toast );
+    click() {
+      DelToast( this.toasts, this.toast );
     },
-    success(message) {
-      this.AddToust( message, 'success' );
-    },
-
-    error(message) {
-      this.AddToust( message, 'error' );
-    },
-  },  
+  }
 };
 </script>
 
