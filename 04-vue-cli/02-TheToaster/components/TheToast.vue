@@ -1,19 +1,13 @@
 <template>
 
-    <div v-if="toast.type === 'success'" @click="click" class="toast toast_success">
-      <ui-icon class="toast__icon" icon="check-circle" />
-      <span>{{ toast.message }}</span>
-    </div>
-
-    <div v-if="toast.type === 'error'" @click="click" class="toast toast_error">
-      <ui-icon class="toast__icon" icon="alert-circle" />
+    <div @click="click" :class= "toast.type === 'success' ? 'toast toast_success' : 'toast toast_error'" >
+      <ui-icon class="toast__icon" :icon= "toast.type === 'success' ? 'check-circle' : 'alert-circle'" />
       <span>{{ toast.message }}</span>
     </div>
 </template>
 
 <script>
 import UiIcon from './UiIcon';
-import { DelToast } from '../api/func.js';
 
 export default {
   name: 'TheToast',
@@ -24,37 +18,16 @@ export default {
       type: Object,
       required: true,
     },
-    toasts: {
-      type: Array,
-      required: true,
-    },
   },
   methods: {
     click() {
-      DelToast( this.toasts, this.toast );
+      this.$emit('click_toast', this.toast );
     },
   }
 };
 </script>
 
 <style scoped>
-.toasts {
-  position: fixed;
-  bottom: 8px;
-  right: 8px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  white-space: pre-wrap;
-  z-index: 999;
-}
-
-@media all and (min-width: 992px) {
-  .toasts {
-    bottom: 72px;
-    right: 112px;
-  }
-}
 
 .toast {
   display: flex;

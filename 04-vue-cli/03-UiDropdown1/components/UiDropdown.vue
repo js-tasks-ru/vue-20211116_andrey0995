@@ -1,16 +1,17 @@
 <template>
-  <div class="dropdown" :class ="dropDowned ? 'dropdown_opened' : '' ">
-    <button @click="click_Down" type="button" :class = "useicon ? 'dropdown__toggle dropdown__toggle_icon' : 'dropdown__toggle'">
-      <ui-icon v-if="useicon" :icon="icon" class="dropdown__icon" />
-      <span>{{text}}</span>
+  <div class="dropdown" 
+       v-bind:class = "{ dropdown_opened: dropDowned }">
+    <button class = "dropdown__toggle" @click="click_Down" type="button" 
+            v-bind:class ="{dropdown__toggle_icon : selected.useicon}" >
+      <ui-icon v-if="selected.useicon && selected.icon" :icon="selected.icon" class="dropdown__icon" />
+      <span>{{selected.text}}</span>
     </button>
 
     <div v-show="dropDowned" class="dropdown__menu" role="listbox">
-      <button v-for="option in options" 
-              @click="click_Select( option.value )"
-              :class="useicon ? 'dropdown__item dropdown__item_icon' : 'dropdown__item'"
+      <button v-for="option in options" class= "dropdown__item"  @click="click_Select( option.value )"
+              v-bind:class="{dropdown__item_icon : selected.useicon }"
               role="option" type="button">
-        <ui-icon v-if="useicon" :icon="option.icon ? option.icon : 'tv'" class="dropdown__icon" />
+        <ui-icon v-if="selected.useicon && option.icon" :icon="option.icon" class="dropdown__icon" />
           {{ option.text }}
       </button>      
     </div>
@@ -27,9 +28,6 @@ export default {
   data() {
     return {
       dropDowned: false ,
-      text: '',
-      icon: 'tv',
-      useicon: false
     }
   },
   props: {
@@ -45,33 +43,21 @@ export default {
       required: true,
     },
   },
-
-  watch: {
-    modelValue(NewValue, OldValue ) {
-      this.SetValue( NewValue );
-      this.dropDowned = false;
-    },
-  },
-
-  created() {
-    console.log(this.title);
-    this.text = this.title;
-    this.useicon = false;
-    this.options.forEach(element => {
-      if ( element.icon ) this.useicon = true;
-    });
-    this.SetValue( this.modelValue );
-  },
-  
-  methods: {
-    SetValue( Value ) {
+  computed: {
+    selected() {
+      let R = {useicon : false, text : this.title, icon : null };
+      R.useicon = false;
       this.options.forEach(element => {
-        if ( element.value === Value ) {
-          this.text = element.text;
-          this.icon = element.icon ? element.icon : 'tv';
+        if ( element.icon ) R.useicon = true;
+        if ( element.value === this.modelValue ) {
+          R.text = element.text;
+          R.icon = element.icon;
         }
       });
-    },
+      return R;
+    }
+  },
+  methods: {
     click_Down() {
       this.dropDowned = !this.dropDowned;
     },
