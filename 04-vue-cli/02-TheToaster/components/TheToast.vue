@@ -1,7 +1,8 @@
 <template>
 
-    <div @click="click" :class= "toast.type === 'success' ? 'toast toast_success' : 'toast toast_error'" >
-      <ui-icon class="toast__icon" :icon= "toast.type === 'success' ? 'check-circle' : 'alert-circle'" />
+    <div @click="click" class = "toast" :class= '{ toast_success: issuccess, toast_error: iserror}' >
+<!--      <ui-icon class="toast__icon" :icon= '{"check-circle": issuccess, "alert-circle": iserror}' /> -->
+      <ui-icon class="toast__icon" :icon= "icon" />
       <span>{{ toast.message }}</span>
     </div>
 </template>
@@ -10,18 +11,33 @@
 import UiIcon from './UiIcon';
 
 export default {
-  name: 'TheToast',
+  name: 'tToast',
   components: { UiIcon },
-
+  emits: ['click'],
   props: {
     toast: {
       type: Object,
       required: true,
     },
   },
+  computed: {
+    issuccess() {
+      return this.toast.type === 'success';
+    },
+    iserror() {
+      return this.toast.type === 'error';
+    },
+    icon() {
+      if ( this.issuccess )  
+        return 'check-circle';
+      else if ( this.iserror )  
+        return 'alert-circle';
+      return null;  
+    }
+  },
   methods: {
     click() {
-      this.$emit('click_toast', this.toast );
+      this.$emit('remove' );
     },
   }
 };

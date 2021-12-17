@@ -1,5 +1,5 @@
 <template>
-  <div :class= 'inline ? "form-group form-group_inline" : "form-group"'>
+  <div class="form-group" :class='{"form-group_inline": inline}'>
     <!-- form-group_inline -->
     <label v-if="label != null && label != ''" class="form-group__label">{{ label }}</label>
     <!-- CONTENT -->

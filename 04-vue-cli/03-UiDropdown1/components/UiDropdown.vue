@@ -8,7 +8,7 @@
     </button>
 
     <div v-show="dropDowned" class="dropdown__menu" role="listbox">
-      <button v-for="option in options" class= "dropdown__item"  @click="click_Select( option.value )"
+      <button v-for="option in options" class= "dropdown__item"  v-on:click="click_Select( option.value )"
               v-bind:class="{dropdown__item_icon : selected.useicon }"
               role="option" type="button">
         <ui-icon v-if="selected.useicon && option.icon" :icon="option.icon" class="dropdown__icon" />
@@ -32,14 +32,14 @@ export default {
   },
   props: {
     options: {
-      Type: Array,
+      type: Array,
       required: true,
     },
     modelValue: {
-      Type: String,
+      type: String,
     },
     title: {
-      Type: String,
+      type: String,
       required: true,
     },
   },

@@ -1,11 +1,11 @@
 <template>
   <div class="toasts">
-    <the-toast v-for="item in toasts" :toast="item"  @click_toast="del_toast($event)"/>  
+    <t-toast v-for="item in toasts" :toast="item"  @remove="del_toast(item)"/>  
   </div>
 </template>
 
 <script>
-import TheToast from './TheToast.vue';
+import tToast from './TheToast.vue';
 
 function DelToast( toaster, toast ) {
   toaster.del_toast( toast );
@@ -14,7 +14,7 @@ function DelToast( toaster, toast ) {
 export default {
   name: 'TheToaster',
   
-  components: { TheToast },
+  components: { tToast },
 
   data() {
      return {
