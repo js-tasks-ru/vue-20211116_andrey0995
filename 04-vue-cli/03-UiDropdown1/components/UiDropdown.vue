@@ -1,30 +1,71 @@
 <template>
-  <div class="dropdown dropdown_opened">
-    <button type="button" class="dropdown__toggle dropdown__toggle_icon">
-      <ui-icon icon="tv" class="dropdown__icon" />
-      <span>Title</span>
+  <div class="dropdown" 
+       v-bind:class = "{ dropdown_opened: dropDowned }">
+    <button class = "dropdown__toggle" @click="click_Down" type="button" 
+            v-bind:class ="{dropdown__toggle_icon : selected.useicon}" >
+      <ui-icon v-if="selected.useicon && selected.icon" :icon="selected.icon" class="dropdown__icon" />
+      <span>{{selected.text}}</span>
     </button>
 
-    <div class="dropdown__menu" role="listbox">
-      <button class="dropdown__item dropdown__item_icon" role="option" type="button">
-        <ui-icon icon="tv" class="dropdown__icon" />
-        Option 1
-      </button>
-      <button class="dropdown__item dropdown__item_icon" role="option" type="button">
-        <ui-icon icon="tv" class="dropdown__icon" />
-        Option 2
-      </button>
+    <div v-show="dropDowned" class="dropdown__menu" role="listbox">
+      <button v-for="option in options" class= "dropdown__item"  v-on:click="click_Select( option.value )"
+              v-bind:class="{dropdown__item_icon : selected.useicon }"
+              role="option" type="button">
+        <ui-icon v-if="selected.useicon && option.icon" :icon="option.icon" class="dropdown__icon" />
+          {{ option.text }}
+      </button>      
     </div>
   </div>
 </template>
 
-<script>
-import UiIcon from './UiIcon';
 
+<script>
+
+import UiIcon from './UiIcon';
 export default {
   name: 'UiDropdown',
-
   components: { UiIcon },
+  data() {
+    return {
+      dropDowned: false ,
+    }
+  },
+  props: {
+    options: {
+      type: Array,
+      required: true,
+    },
+    modelValue: {
+      type: String,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+  },
+  computed: {
+    selected() {
+      let R = {useicon : false, text : this.title, icon : null };
+      R.useicon = false;
+      this.options.forEach(element => {
+        if ( element.icon ) R.useicon = true;
+        if ( element.value === this.modelValue ) {
+          R.text = element.text;
+          R.icon = element.icon;
+        }
+      });
+      return R;
+    }
+  },
+  methods: {
+    click_Down() {
+      this.dropDowned = !this.dropDowned;
+    },
+    click_Select( value ) {
+      this.dropDowned = false;
+      this.$emit('update:modelValue', value);
+    },
+  },
 };
 </script>
 
