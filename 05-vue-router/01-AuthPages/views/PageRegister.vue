@@ -31,7 +31,7 @@
           </label>
         </ui-form-group>
         <div class="form__buttons">
-          <button @click="handleSubmit" type="submit" class="button button_primary">Зарегистрироваться</button>
+          <button type="submit" class="button button_primary">Зарегистрироваться</button>
         </div>
         <div class="form__append">Уже есть аккаунт? <router-link :to="'/login'" class="link">Войдите</router-link></div>
       </form>
