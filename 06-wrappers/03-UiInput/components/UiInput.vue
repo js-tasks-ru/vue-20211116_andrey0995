@@ -23,6 +23,7 @@
 <script>
 export default {
   name: 'UiInput',
+   emits: ['update:modelValue'],
   inheritAttrs: false,
   props: {
     small: {
@@ -42,7 +43,6 @@ export default {
     focus() {
       this.$refs['input'].focus();
     },
-   emits: ['update:modelValue'],
   },
 };
 </script>
