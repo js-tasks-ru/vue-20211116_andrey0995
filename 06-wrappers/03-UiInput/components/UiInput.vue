@@ -41,8 +41,8 @@ export default {
   methods: {
     focus() {
       this.$refs['input'].focus();
-    }
-
+    },
+   emits: ['update:modelValue'],
   },
 };
 </script>
