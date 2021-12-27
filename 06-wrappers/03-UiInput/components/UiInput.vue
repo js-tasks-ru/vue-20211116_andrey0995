@@ -23,7 +23,7 @@
 <script>
 export default {
   name: 'UiInput',
-   emits: ['update:modelValue'],
+  emits: ['update:modelValue'],
   inheritAttrs: false,
   props: {
     small: {

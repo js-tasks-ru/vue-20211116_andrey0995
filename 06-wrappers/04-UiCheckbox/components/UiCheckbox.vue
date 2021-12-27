@@ -1,6 +1,6 @@
 <template>
   <label class="checkbox">
-    <input type="checkbox" class="checkbox__input" v-model="modelValueProxy"/>
+    <input type="checkbox" class="checkbox__input" v-model="modelValueProxy" v-bind="$attrs"/>
     <span class="checkbox__box"></span>
     <slot/>
   </label>
@@ -9,7 +9,8 @@
 <script>
 export default {
   name: 'UiCheckbox',
-   emits: ['update:modelValue'],
+  inheritAttrs: false,
+  emits: ['update:modelValue'],
   props: {
     modelValue: {
       type: [Boolean, Array],
