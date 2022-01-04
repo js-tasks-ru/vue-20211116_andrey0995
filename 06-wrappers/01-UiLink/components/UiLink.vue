@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" :to="to" class="link"><slot></slot></component>
+  <component :is="tag" class="link"><slot></slot></component>
 </template>
 
 <script>
@@ -9,9 +9,6 @@ export default {
     tag: {
       type : String,
       default: 'router-link'
-    },
-    to: {
-      type: [String, Object]
     },
   },
 };

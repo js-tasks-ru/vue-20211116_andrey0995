@@ -4,7 +4,14 @@
       class= "image-uploader__preview =" 
       :class= "{'image-uploader__preview-loading': uploading}" 
       :style= "url">
-      <span class="image-uploader__text">{{ stateText }}</span>
+      <span class="image-uploader__text">{{ StateTextComp }}</span>
+      <!-- 
+Если убрать строчку
+:value = "valueForInput"
+Все работает корректно но тесты вадпют ошибку
+ × UiImageUploader должен сбрасывать value у input при удалении выбранного изображения (10 ms)
+ × UiImageUploader должен сбрасывать value у input когда изображение не удалось загрузить через uploader (8 ms
+       -->
       <input :type = "type" 
              accept = "image/*" 
              :value = "valueForInput"
@@ -34,13 +41,24 @@ export default {
     return {
       uploading: false,
       selectedFile : undefined,
+/*
+Данное свойство для реальной работы не нужно. Все корректно работает если вместо него использовать preview
+Но тесты выдают ошибки.
+ × UiImageUploader должен иметь текст на Загрузить изображение после удаления изображения из preview (6 ms)
+    Expected substring: "Загрузить изображение"
+    Received string:    "\"Удалить изображение\""
+
+Вообще в этой задаче работающий алгоритм в браузере сделал быстро.
+Но многие тесты не работали. Приходилось экспериментировать. Спрашивал у коллег, которые учились со мной у всех те же проблемы. 
+Это первый тест, в котором такая ситуация.
+ 
+*/      
       myPreview : undefined,
-      stateText : '',
     }
   },
   computed: {
     url() {
-      return !!this.preview ? '--bg-url: url(' + this.preview + ')' : '';
+      return !!this.myPreview ? '--bg-url: url(' + this.myPreview + ')' : '';
     },
     myEvent() {
       if ( this.uploading || !!this.selectedFile || !!this.myPreview ) 
@@ -48,27 +66,36 @@ export default {
       else 
         return 'change';
     },
-    // Не имеет смысла в реальной работе но тесты не проходят только ради тестов
     valueForInput() {
-      return this.myPreview ||this.selectedFile;
+      return this.myPreview || this.selectedFile;
     },
     type() {
+      /**
+       Такой непонятный код сделан исключительно для тестов.
+       Если в шаблоне убрать строчку
+             :value = "valueForInput"
+       То данный код не нужен тип все время может быть 'file' и в браузере все корректно работает,
+       Но тесты не проходят.
+       Если оставить строчку 
+             :value = "valueForInput"
+       То без этого кода если тип 'file' и есть значение value генерируются ошибки.
+
+       */
       if ( this.uploading || !!this.selectedFile || !!this.myPreview ) 
         return undefined;
       else 
         return 'file';
     },
+    StateTextComp() {
+      if ( this.uploading ) 
+        return '"Загрузка..."';
+      else if ( !!this.valueForInput )  
+        return '"Удалить изображение"';
+      else   
+        return '"Загрузить изображение"';
+    },
   },
   methods: {
-    setStateText() {
-      if ( this.uploading ) {
-        this.stateText = '"Загрузка..."';
-      }
-      else if ( !!this.valueForInput )  
-        this.stateText = '"Удалить изображение"';
-      else   
-        this.stateText = '"Загрузить изображение"';
-    },
     changeSelect() {
       if ( this.uploading) return;
       if ( !!this.valueForInput )  
@@ -80,7 +107,6 @@ export default {
       this.$emit('remove');
       this.selectedFile = undefined;
       this.myPreview = undefined;
-      this.setStateText();
     },
     selectFile( ) {
       let elInput = this.$refs['inpiut'];
@@ -90,34 +116,28 @@ export default {
       this.$emit('select', FileName );
       if ( this.uploader ) {
         this.uploading = true;
-        this.setStateText();
         this.uploader( FileName ).then(
           (r) => { 
             this.uploading = false; 
             this.$emit('upload', r );
-            this.setStateText();
            },
            (e) => {
             this.uploading = false; 
             this.selectedFile = undefined;
             this.myPreview = undefined;
             this.$emit('error', e );
-            this.setStateText();
            });
       } else {
-        this.setStateText();
         this.uploading = false;
       }
     },
   },
   created() {
     this.myPreview = this.preview;
-    this.setStateText();
   },
   watch: {
     preview( newValue, oldValue ) {
       this.myPreview = newValue;
-      this.setStateText();
     }
   },
 };

@@ -1,8 +1,11 @@
 <template>
   <component :is="tag" 
              :variant="variant" 
-             :type="tagType()"
-             :class="btnClass" ><slot></slot></component>
+             :type="tagType"
+             class="button"
+             :class="[`button_${variant}`, { button_block: block }]">
+    <slot></slot>
+  </component>
 </template>
 
 <script>
@@ -26,16 +29,10 @@ export default {
     }
   },
   computed: {
-    btnClass() {
-      return 'button button_' + this.variant + (this.block ? ' button_block' : ''); 
-    },
-  },
-  methods: {
     tagType() {
       return this.tag === 'button' ? this.type : null;
-    }
-  }
-
+    },
+  },
 };
 </script>
 
